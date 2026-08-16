@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CITE — College of Information Technology and Engineering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black: #0a0706;
+    --charcoal: #150b0a;
+    --maroon-deep: #3a0e0e;
+    --maroon: #6b1414;
+    --red: #b91f24;
+    --red-bright: #e3282f;
+    --cream: #f5ece4;
+    --white: #ffffff;
+    --gold: #cfa15a;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Orbitron', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  p, .body-text{ font-family:'Inter', sans-serif; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- Ambient liquid-metal backdrop ---------- */
+  .swirl-bg{
+    position:fixed; inset:0; z-index:-2;
+    background:
+      radial-gradient(1200px 800px at 15% 20%, rgba(185,31,36,0.35), transparent 60%),
+      radial-gradient(900px 700px at 85% 60%, rgba(58,14,14,0.6), transparent 55%),
+      linear-gradient(160deg, #0a0706 0%, #180808 45%, #0a0706 100%);
+    animation: drift 24s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    0%{ filter:hue-rotate(0deg) brightness(1); }
+    100%{ filter:hue-rotate(6deg) brightness(1.08); }
+  }
+  .grain{
+    position:fixed; inset:0; z-index:-1; opacity:0.05; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 22px 4vw;
+  }
+  .brand{
+    display:flex; align-items:center; gap:12px;
+    font-family:'Orbitron'; font-weight:900; font-size:1.1rem; letter-spacing:0.15em;
+  }
+  .brand .mark{
+    width:38px; height:38px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--red-bright), var(--maroon-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.65rem; border:1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 0 18px rgba(227,40,47,0.55);
+  }
+
+  nav.pill{
+    display:flex; gap:6px;
+    background: linear-gradient(180deg, rgba(107,20,20,0.55), rgba(20,6,6,0.55));
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px; padding:6px; backdrop-filter: blur(10px);
+  }
+  nav.pill a{
+    padding:10px 22px; border-radius:999px; font-size:0.95rem; font-weight:600;
+    letter-spacing:0.03em; color: rgba(245,236,228,0.85);
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+  nav.pill a.active, nav.pill a:hover{
+    background: linear-gradient(180deg, rgba(227,40,47,0.55), rgba(107,20,20,0.65));
+    color: var(--white);
+  }
+
+  .contact-btn{
+    padding:14px 30px; border-radius:999px;
+    background: rgba(10,7,6,0.75);
+    border:1px solid rgba(207,161,90,0.5);
+    font-family:'Orbitron'; font-size:0.8rem; letter-spacing:0.12em; font-weight:600;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+    transition: box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .contact-btn:hover{ box-shadow:0 0 22px rgba(207,161,90,0.45); transform:translateY(-1px); }
+
+  /* ---------- Scroll progress ---------- */
+  .progress-bar{
+    position:fixed; top:0; left:0; height:3px; width:0%; z-index:60;
+    background: linear-gradient(90deg, var(--gold), var(--red-bright));
+    box-shadow:0 0 12px rgba(227,40,47,0.6);
+    transition: width 0.08s linear;
+  }
+
+  /* ---------- Cursor glow ---------- */
+  .cursor-glow{
+    position:fixed; width:420px; height:420px; border-radius:50%; z-index:0;
+    pointer-events:none; top:0; left:0;
+    background: radial-gradient(circle, rgba(227,40,47,0.16), transparent 70%);
+    transform:translate(-50%,-50%);
+    transition: opacity 0.4s ease;
+    opacity:0;
+  }
+  @media (max-width:900px){ .cursor-glow{ display:none; } }
+
+  /* ---------- Mobile menu ---------- */
+  .burger{
+    display:none; flex-direction:column; gap:5px; width:34px; cursor:pointer; z-index:60;
+  }
+  .burger span{ height:2px; background:var(--cream); border-radius:2px; transition:transform 0.3s ease, opacity 0.3s ease; }
+  .burger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu{
+    position:fixed; inset:0; z-index:45; background:rgba(8,4,4,0.97);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px;
+    opacity:0; pointer-events:none; transition:opacity 0.4s ease;
+  }
+  .mobile-menu.open{ opacity:1; pointer-events:auto; }
+  .mobile-menu a{
+    font-family:'Orbitron'; font-size:1.4rem; letter-spacing:0.1em;
+    opacity:0; transform:translateY(14px); transition:opacity 0.4s ease, transform 0.4s ease;
+  }
+  .mobile-menu.open a{ opacity:1; transform:translateY(0); }
+  .mobile-menu.open a:nth-child(1){ transition-delay:0.05s; }
+  .mobile-menu.open a:nth-child(2){ transition-delay:0.12s; }
+  .mobile-menu.open a:nth-child(3){ transition-delay:0.19s; }
+  .mobile-menu.open a:nth-child(4){ transition-delay:0.26s; }
+
+  @media (max-width:900px){
+    nav.pill{ display:none; }
+    .burger{ display:flex; }
+  }
+
+  /* ---------- Hero ---------- */
+  section{ position:relative; padding: 160px 5vw 90px; min-height:100vh; display:flex; flex-direction:column; justify-content:center; }
+
+  #home{
+    padding-top:150px;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.3fr 0.9fr; gap:60px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    font-family:'Orbitron'; font-size:0.75rem; letter-spacing:0.35em; color: var(--gold);
+    margin-bottom:22px; display:flex; align-items:center; gap:14px;
+  }
+  .eyebrow::before{ content:''; width:38px; height:1px; background:var(--gold); display:inline-block; }
+
+  .hero-title{
+    font-size: clamp(3.2rem, 9vw, 7rem);
+    font-weight:900; line-height:0.92;
+    background: linear-gradient(180deg, #ffffff 0%, #e7c9c9 60%, #a4302f 130%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 60px rgba(227,40,47,0.35);
+    margin-bottom: 18px;
+  }
+  .hero-sub{
+    font-family:'Rajdhani'; font-weight:600; font-size:1.35rem; letter-spacing:0.06em;
+    color: rgba(245,236,228,0.85); max-width:520px; margin-bottom:36px;
+    text-transform:uppercase;
+  }
+
+  .hero-cta{ display:flex; gap:16px; flex-wrap:wrap; }
+  .btn-primary, .btn-ghost{
+    font-family:'Orbitron'; font-size:0.78rem; letter-spacing:0.12em; font-weight:600;
+    padding:16px 32px; border-radius:999px; display:inline-flex; align-items:center; gap:10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-primary{
+    background: linear-gradient(135deg, var(--red-bright), var(--maroon));
+    box-shadow: 0 8px 30px rgba(227,40,47,0.4);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 12px 36px rgba(227,40,47,0.55); }
+  .btn-ghost{
+    border:1px solid rgba(245,236,228,0.35); color:var(--cream);
+  }
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+
+  /* hero visual: rotating gear / emblem */
+  .hero-visual{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    aspect-ratio:1/1;
+  }
+  .ring{
+    position:absolute; border-radius:50%; border:1px solid rgba(227,40,47,0.35);
+  }
+  .ring.r1{ inset:0%; animation:spin 40s linear infinite; }
+  .ring.r2{ inset:10%; border-color:rgba(207,161,90,0.3); animation:spin 30s linear infinite reverse; }
+  .ring.r3{ inset:20%; border-color:rgba(245,236,228,0.15); animation:spin 55s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .emblem{
+    width:44%; aspect-ratio:1/1; position:relative; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(circle at 35% 25%, #d8474c, #6b1414 70%);
+    border-radius:16px; transform:rotate(45deg);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 60px rgba(227,40,47,0.3);
+  }
+  .emblem span{ transform:rotate(-45deg); font-family:'Orbitron'; font-weight:900; font-size:2rem; color:var(--white); }
+
+  .what-we-do{
+    position:relative; z-index:3; margin-top:-40px; align-self:flex-end;
+    background: linear-gradient(160deg, rgba(107,20,20,0.9), rgba(20,6,6,0.9));
+    border:1px solid rgba(255,255,255,0.12); border-radius:24px; padding:28px 30px;
+    max-width:360px; backdrop-filter: blur(6px);
+  }
+  .what-we-do h3{ font-size:1.1rem; margin-bottom:10px; letter-spacing:0.06em; }
+  .what-we-do p{ font-size:0.95rem; line-height:1.5; color:rgba(245,236,228,0.85); }
+
+  .marquee-strip{
+    margin-top:60px; border:1px solid rgba(255,255,255,0.18); border-radius:999px;
+    padding:20px 40px; text-align:center; font-family:'Orbitron'; font-size:0.9rem;
+    letter-spacing:0.25em; color:rgba(245,236,228,0.7);
+  }
+
+  /* ---------- Section headers ---------- */
+  .section-head{ text-align:center; margin-bottom:64px; }
+  .section-head h2{
+    font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight:900;
+    text-shadow: 0 0 40px rgba(227,40,47,0.4);
+  }
+  .divider{
+    display:flex; align-items:center; gap:14px; justify-content:center; margin-bottom:20px;
+  }
+  .divider span{ width:70px; height:2px; background: linear-gradient(90deg, transparent, var(--red-bright)); }
+  .divider span.right{ background: linear-gradient(90deg, var(--red-bright), transparent); }
+
+  /* ---------- Programs ---------- */
+  .programs-grid{
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:28px 20px;
+  }
+  @media (max-width:1100px){ .programs-grid{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:640px){ .programs-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  .program-card{
+    text-align:center; padding:30px 12px; border-radius:20px;
+    transition: transform 0.25s ease, background 0.35s ease, box-shadow 0.35s ease;
+    cursor:default; transform-style:preserve-3d; will-change:transform;
+  }
+  .program-card:hover{ background: rgba(107,20,20,0.25); box-shadow:0 18px 40px rgba(0,0,0,0.35); }
+  .icon-circle{
+    width:88px; height:88px; margin:0 auto 18px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    border:1.5px solid rgba(245,236,228,0.5);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  }
+  .program-card:hover .icon-circle{ border-color:var(--red-bright); box-shadow:0 0 26px rgba(227,40,47,0.45); transform:scale(1.08); }
+  .icon-circle svg{ width:38px; height:38px; stroke:var(--cream); fill:none; stroke-width:1.6; }
+  .program-card p{
+    font-family:'Rajdhani'; font-weight:700; font-size:0.95rem; letter-spacing:0.02em;
+    text-transform:uppercase; line-height:1.3;
+  }
+
+  /* ---------- Activities ---------- */
+  .activities-wrap{ display:flex; flex-direction:column; gap:26px; }
+  .activity-tabs{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:20px; }
+  .activity-tabs button{
+    font-family:'Orbitron'; font-size:0.72rem; letter-spacing:0.1em; font-weight:600;
+    padding:12px 22px; border-radius:999px; border:1px solid rgba(255,255,255,0.18);
+    background:transparent; color:rgba(245,236,228,0.7); cursor:pointer;
+    transition: all 0.3s ease;
+  }
+  .activity-tabs button.active{
+    background: linear-gradient(135deg, var(--red-bright), var(--maroon));
+    color:var(--white); border-color:transparent;
+    position:relative; overflow:hidden;
+  }
+  .activity-tabs button.active::after{
+    content:''; position:absolute; left:0; bottom:0; top:0; width:0%;
+    background:rgba(255,255,255,0.22);
+    animation: tab-progress 6s linear forwards;
+  }
+  .activity-tabs button.paused.active::after{ animation-play-state:paused; }
+  @keyframes tab-progress{ from{ width:0%; } to{ width:100%; } }
+
+  .activity-panel{ display:none; }
+  .activity-panel.active{ display:grid; grid-template-columns: 0.9fr 1.4fr; gap:50px; align-items:center; }
+  @media (max-width:900px){ .activity-panel.active{ grid-template-columns:1fr; } }
+
+  .activity-copy h3{ font-size:2.2rem; margin-bottom:16px; }
+  .activity-copy p{ font-size:1.05rem; line-height:1.6; color:rgba(245,236,228,0.85); margin-bottom:22px; }
+  .activity-tagline{ font-style:italic; color:var(--gold); font-family:'Inter'; letter-spacing:0.03em; }
+
+  .activity-images{ display:flex; gap:16px; }
+  .activity-images .card{
+    flex:1; aspect-ratio:3/4; border-radius:14px; overflow:hidden; position:relative;
+    display:flex; align-items:flex-end; padding:16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+    transition: transform 0.4s ease;
+  }
+  .activity-images .card:hover{ transform:translateY(-8px); }
+  .activity-images .card:nth-child(2){ transform:translateY(18px); }
+  .activity-images .card:nth-child(2):hover{ transform:translateY(10px); }
+
+  /* ---------- About ---------- */
+  #about{ text-align:center; }
+  .about-emblem{
+    width:110px; height:110px; margin:0 auto 26px; border-radius:22px;
+    background: radial-gradient(circle at 35% 25%, #d8474c, #6b1414 70%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 0 50px rgba(227,40,47,0.4);
+    font-family:'Orbitron'; font-weight:900; color:white; font-size:1.6rem;
+  }
+  #about h2{ font-size: clamp(2rem, 5vw, 3.2rem); margin-bottom:26px; line-height:1.15; }
+  #about p{ max-width:640px; margin:0 auto; font-size:1.1rem; line-height:1.7; color:rgba(245,236,228,0.85); }
+
+  /* ---------- Footer / Contact ---------- */
+  footer{
+    padding:70px 5vw 40px; text-align:center; border-top:1px solid rgba(255,255,255,0.08);
+  }
+  footer h2{ font-size:clamp(1.8rem,4vw,2.6rem); margin-bottom:16px; }
+  footer p{ color:rgba(245,236,228,0.7); margin-bottom:30px; }
+  .socials{ display:flex; gap:18px; justify-content:center; margin-bottom:34px; }
+  .socials a{
+    width:44px; height:44px; border-radius:50%; border:1px solid rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center; transition:all 0.3s ease;
+  }
+  .socials a:hover{ border-color:var(--red-bright); box-shadow:0 0 18px rgba(227,40,47,0.4); }
+  .fine-print{ font-size:0.8rem; color:rgba(245,236,228,0.4); font-family:'Inter'; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.7s cubic-bezier(.2,.7,.2,1), transform 0.7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .card{ opacity:0; }
+  .card img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="swirl-bg"></div>
+<div class="grain"></div>
+<div class="progress-bar" id="progressBar"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header>
+  <div class="brand">
+    <div class="mark">CITE</div>
+    <span>DE&nbsp;LA&nbsp;SALLE&nbsp;LIPA</span>
+  </div>
+  <nav class="pill">
+    <a href="#home" class="active">Home</a>
+    <a href="#programs">Programs</a>
+    <a href="#activities">Activities</a>
+    <a href="#about">About</a>
+  </nav>
+  <a href="#contact" class="contact-btn">Contact Us</a>
+  <div class="burger" id="burger" aria-label="Menu" role="button" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#home">Home</a>
+  <a href="#programs">Programs</a>
+  <a href="#activities">Activities</a>
+  <a href="#about">About</a>
+</div>
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">College of Information Technology &amp; Engineering</div>
+      <h1 class="hero-title">CITE</h1>
+      <p class="hero-sub">Where technical skill meets service — building what the future runs on.</p>
+      <div class="hero-cta">
+        <a href="#programs" class="btn-primary">Explore Programs</a>
+        <a href="#activities" class="btn-ghost">See Activities</a>
+      </div>
+    </div>
+    <div>
+      <div class="hero-visual">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="emblem"><span>CITE</span></div>
+      </div>
+      <div class="what-we-do reveal">
+        <h3>What We Do?</h3>
+        <p>We equip students with the technical skills, innovation, and values needed to design, build, and lead in the world of technology and engineering.</p>
+      </div>
+    </div>
+  </div>
+  <div class="marquee-strip reveal">THIS IS CITE IN ACTION.</div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs">
+  <div class="section-head reveal">
+    <div class="divider"><span></span></div>
+    <h2>CITE Programs</h2>
+  </div>
+  <div class="programs-grid">
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg></div>
+      <p>BS Architecture</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9V9c.2.6.7 1 1.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></div>
+      <p>BS Computer<br>Engineering</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div>
+      <p>BS Computer<br>Science</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M13 7l-5 6h4l-1 4 5-6h-4l1-4z" fill="currentColor" stroke="none"/></svg></div>
+      <p>BS Electrical<br>Engineering</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg></div>
+      <p>BS Electronics<br>Engineering</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><rect x="8" y="6" width="8" height="7" rx="1"/><path d="M11 18h2M9 21h6"/></svg></div>
+      <p>BS Entertainment &amp;<br>Multimedia Computing</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10l4-3 4 3v11M13 21v-7l4-2 4 2v7"/></svg></div>
+      <p>BS Industrial<br>Engineering</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+      <p>BS Information<br>Technology</p>
+    </div>
+    <div class="program-card reveal">
+      <div class="icon-circle"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M9 20h6M12 15v5"/></svg></div>
+      <p>Associate in Computer<br>Technology</p>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITIES -->
+<section id="activities">
+  <div class="section-head reveal">
+    <div class="divider"><span></span></div>
+    <h2>CITE Activities</h2>
+  </div>
+
+  <div class="activities-wrap">
+    <div class="activity-tabs reveal">
+      <button class="active" data-tab="takeoff">CITE Takeoff</button>
+      <button data-tab="ardui">Ardui-Know</button>
+      <button data-tab="peak">CITE Peak</button>
+      <button data-tab="summit">Summit of Excellence</button>
+    </div>
+
+    <div class="activity-panel active" id="takeoff">
+      <div class="activity-copy">
+        <h3>CITE Takeoff</h3>
+        <p>A seminar bringing together CITE's student leaders — mayors and vice mayors — to align on vision, direction, and what it means to lead within the college for the term ahead.</p>
+        <span class="activity-tagline">Where leadership takes flight.</span>
+      </div>
+      <div class="activity-images">
+        <div class="card" style="background:linear-gradient(160deg,#7a2020,#1a0808);"></div>
+        <div class="card" style="background:linear-gradient(160deg,#8a2a1c,#241009);"></div>
+      </div>
+    </div>
+
+    <div class="activity-panel" id="ardui">
+      <div class="activity-copy">
+        <h3>Ardui-Know</h3>
+        <p>A hands-on competition for students to put their Arduino skills to the test, from circuits to code, showcasing creativity and technical know-how in real time.</p>
+        <span class="activity-tagline">Code it. Wire it. Own it.</span>
+      </div>
+      <div class="activity-images">
+        <div class="card" style="background:linear-gradient(160deg,#5c1616,#1a0808);"></div>
+        <div class="card" style="background:linear-gradient(160deg,#7a2a1c,#241009);"></div>
+      </div>
+    </div>
+
+    <div class="activity-panel" id="peak">
+      <div class="activity-copy">
+        <h3>CITE Peak</h3>
+        <p>CITE's volunteer corps for the LS Cup, supporting the games from the ground up.</p>
+        <span class="activity-tagline">Every peak needs people behind it.</span>
+      </div>
+      <div class="activity-images">
+        <div class="card" style="background:linear-gradient(160deg,#8a3020,#20100a);"></div>
+        <div class="card" style="background:linear-gradient(160deg,#b0453a,#2a1410);"></div>
+      </div>
+    </div>
+
+    <div class="activity-panel" id="summit">
+      <div class="activity-copy">
+        <h3>Summit of Excellence</h3>
+        <p>CITE's recognition night for students who've reached new heights in academics and service.</p>
+        <span class="activity-tagline">The view from the top.</span>
+      </div>
+      <div class="activity-images">
+        <div class="card" style="background:linear-gradient(160deg,#c9c9c9,#5c1616);"></div>
+        <div class="card" style="background:linear-gradient(160deg,#8a2a1c,#241009);"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-emblem reveal">CITE</div>
+  <h2 class="reveal">College of Information<br>Technology and Engineering</h2>
+  <p class="reveal">The College of Information, Technology, and Engineering (CITE) provides students with an interest in engineering and information technology a venue to be technically skilled, competent, responsive, and responsible for global development.</p>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact">
+  <h2>Reach Out &amp; Connect</h2>
+  <p>This is your first step toward unlocking what's possible with CITE.</p>
+  <div class="socials">
+    <a href="#" aria-label="Facebook">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h-2a5 5 0 00-5 5v2H6v4h2v7h4v-7h3l1-4h-4V8a1 1 0 011-1h3z"/></svg>
+    </a>
+    <a href="#" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+  </div>
+  <p class="fine-print">© 2026 CITE — De La Salle Lipa. All rights reserved.</p>
+</footer>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- scroll progress bar ----------
+  const progressBar = document.getElementById('progressBar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  }
+  document.addEventListener('scroll', updateProgress, { passive:true });
+  updateProgress();
+
+  // ---------- cursor glow ----------
+  const glow = document.getElementById('cursorGlow');
+  if(!reduceMotion){
+    window.addEventListener('pointermove', (e) => {
+      glow.style.opacity = '1';
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+    window.addEventListener('pointerleave', () => glow.style.opacity = '0');
+  }
+
+  // ---------- mobile menu ----------
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  function toggleMenu(){
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  }
+  burger.addEventListener('click', toggleMenu);
+  burger.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' ') toggleMenu(); });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    burger.classList.remove('open'); mobileMenu.classList.remove('open');
+  }));
+
+  // ---------- nav active state on scroll ----------
+  const links = document.querySelectorAll('nav.pill a');
+  const sections = ['home','programs','activities','about'].map(id => document.getElementById(id));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        links.forEach(l => l.classList.remove('active'));
+        const match = document.querySelector('nav.pill a[href="#'+e.target.id+'"]');
+        if(match) match.classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s => s && io.observe(s));
+
+  // ---------- reveal on scroll, staggered by sibling order ----------
+  const groups = document.querySelectorAll('.programs-grid, .activity-images, .activities-wrap');
+  groups.forEach(group => {
+    [...group.children].forEach((child, i) => {
+      child.style.transitionDelay = (i * 70) + 'ms';
+    });
+  });
+
+  const revealEls = document.querySelectorAll('.reveal, .program-card, .card');
+  revealEls.forEach(el => { if(!el.classList.contains('reveal')) el.classList.add('reveal'); });
+  const ro = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+  // ---------- program card tilt ----------
+  if(!reduceMotion){
+    document.querySelectorAll('.program-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = `translateY(-6px) rotateX(${(-y*10).toFixed(2)}deg) rotateY(${(x*10).toFixed(2)}deg)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  // ---------- activity tabs: click + auto-advance ----------
+  const tabButtons = document.querySelectorAll('.activity-tabs button');
+  const panels = document.querySelectorAll('.activity-panel');
+  let activeIndex = 0;
+  let autoTimer;
+
+  function activateTab(index, restart = true){
+    activeIndex = index;
+    tabButtons.forEach(b => b.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    tabButtons[index].classList.add('active');
+    document.getElementById(tabButtons[index].dataset.tab).classList.add('active');
+    if(restart) restartAuto();
+  }
+
+  function restartAuto(){
+    clearTimeout(autoTimer);
+    if(reduceMotion) return;
+    autoTimer = setTimeout(() => activateTab((activeIndex + 1) % tabButtons.length), 6000);
+  }
+
+  tabButtons.forEach((btn, i) => {
+    btn.addEventListener('click', () => activateTab(i));
+  });
+
+  const activitiesSection = document.getElementById('activities');
+  activitiesSection.addEventListener('mouseenter', () => clearTimeout(autoTimer));
+  activitiesSection.addEventListener('mouseleave', () => restartAuto());
+
+  restartAuto();
+</script>
+
+</body>
+</html>
